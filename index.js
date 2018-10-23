@@ -1,5 +1,6 @@
 const MatrixClient = require("matrix-bot-sdk").MatrixClient;
 const AutojoinRoomsMixin = require("matrix-bot-sdk").AutojoinRoomsMixin;
+var os = require('os');
 
 const Eliza = require('eliza-as-promised');
  
@@ -8,7 +9,19 @@ AutojoinRoomsMixin.setupOnClient(client);
 
 var elizas = {};
 
+var loggingRoom = "!uJHcyrdVMXEzEYzZcI:matrix.org";
+
+sendLog(`Started on ${os.hostname}`);
+
+function sendLog(message) {
+    client.sendMessage(loggingRoom, {
+        "msgtype": "m.notice",
+        "body": message
+    });
+}
+
 async function startEliza(roomId) {
+    sendLog(`startEliza for ${roomId}`);
     delete elizas[roomId];
     
     var power = await client.userHasPowerLevelFor("@elizabot:matrix.org", roomId, "m.room.message")
@@ -23,12 +36,11 @@ async function startEliza(roomId) {
     });
 }
 
-client.on("room.join", (roomId, event) => {
+client.on("room.join", (roomId) => {
+    sendLog(`Got join event for ${roomId}`);
     if (process.uptime() < 10) {
         return;
     }
-    console.log("++++++++++\room.join++++++++++\n++++++++++");
-    console.log(roomId);
     startEliza(roomId);
 });
  
@@ -38,8 +50,9 @@ client.on("room.message", (roomId, event) => {
     if (event.sender === "@elizabot:matrix.org") return;
     if (event.sender === "@server:matrix.org") return;
     if (event.unsigned.age > 1000 * 60) return; // older than a minute
+    if (roomId === loggingRoom) return;
 
-    console.log(event.sender + " says " + event.content.body);
+    //console.log(event.sender + " says " + event.content.body);
     if (!elizas[roomId] || (new Date()).getTime() - elizas[roomId].last > 1000 * 60 * 5) {
         startEliza(roomId);
     }
