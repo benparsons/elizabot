@@ -1,10 +1,20 @@
 const MatrixClient = require("matrix-bot-sdk").MatrixClient;
 const AutojoinRoomsMixin = require("matrix-bot-sdk").AutojoinRoomsMixin;
 var os = require('os');
+var config = require('config');
+var access_token = "";
+if (config.has('access_token')) {
+    access_token = config.get('access_token');
+} else {
+    console.log("mising access_token");
+    process.exit(1);
+}
+  
+
 
 const Eliza = require('eliza-as-promised');
  
-const client = new MatrixClient("https://matrix.org", "MDAxOGxvY2F0aW9uIG1hdHJpeC5vcmcKMDAxM2lkZW50aWZpZXIga2V5CjAwMTBjaWQgZ2VuID0gMQowMDI3Y2lkIHVzZXJfaWQgPSBAZWxpemFib3Q6bWF0cml4Lm9yZwowMDE2Y2lkIHR5cGUgPSBhY2Nlc3MKMDAyMWNpZCBub25jZSA9IHRid0lrRWpPPW1MQzcqX2MKMDAyZnNpZ25hdHVyZSA6nZoqRham5etdVNyyAGRWvU_eTnMxTJXaJMUNyJW3XAo");
+const client = new MatrixClient("https://matrix.org", access_token);
 AutojoinRoomsMixin.setupOnClient(client);
 
 var elizas = {};

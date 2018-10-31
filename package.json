@@ -9,6 +9,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "config": "^2.0.1",
     "eliza-as-promised": "git+https://github.com/natelewis/eliza-as-promised.git",
     "matrix-bot-sdk": "^0.1.16"
   }
