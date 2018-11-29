@@ -1,3 +1,5 @@
+process.chdir(__dirname);
+
 const MatrixClient = require("matrix-bot-sdk").MatrixClient;
 const AutojoinRoomsMixin = require("matrix-bot-sdk").AutojoinRoomsMixin;
 var os = require('os');
