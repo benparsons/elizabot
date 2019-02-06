@@ -63,6 +63,7 @@ client.on("room.message", (roomId, event) => {
     if (event.sender === "@server:matrix.org") return;
     if (event.unsigned.age > 1000 * 60) return; // older than a minute
     if (roomId === loggingRoom) return;
+    if (event["sender"] === await client.getUserId()) return;
 
     //console.log(event.sender + " says " + event.content.body);
     if (!elizas[roomId] || (new Date()).getTime() - elizas[roomId].last > 1000 * 60 * 5) {
