@@ -5,10 +5,17 @@ const AutojoinRoomsMixin = require("matrix-bot-sdk").AutojoinRoomsMixin;
 var os = require('os');
 var config = require('config');
 var access_token = "";
+var homserver = "";
 if (config.has('access_token')) {
     access_token = config.get('access_token');
 } else {
     console.log("mising access_token");
+    process.exit(1);
+}
+if (config.has('homeserver')) {
+    homeserver = config.get('homeserver');
+} else {
+    console.log("mising homeserver");
     process.exit(1);
 }
   
@@ -16,7 +23,7 @@ if (config.has('access_token')) {
 
 const Eliza = require('eliza-as-promised');
  
-const client = new MatrixClient("https://matrix.org", access_token);
+const client = new MatrixClient(homserver, access_token);
 AutojoinRoomsMixin.setupOnClient(client);
 
 var elizas = {};
