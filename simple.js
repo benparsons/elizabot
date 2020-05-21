@@ -7,7 +7,6 @@ var access_token = "";
 var homeserver = "";
 var bot_user = "";
 if (!( config.has('access_token') && config.has('homeserver') && config.has('bot_user'))) {
-} else {
     console.log("config fields required: access_token, homeserver, bot_user");
     process.exit(1);
 }
