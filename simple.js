@@ -4,19 +4,17 @@ const AutojoinRoomsMixin = require("matrix-bot-sdk").AutojoinRoomsMixin;
 
 var config = require('config');
 var access_token = "";
-var homserver = "";
-if (config.has('access_token')) {
-    access_token = config.get('access_token');
+var homeserver = "";
+var bot_user = "";
+if (!( config.has('access_token') && config.has('homeserver') && config.has('bot_user'))) {
 } else {
-    console.log("mising access_token");
+    console.log("config fields required: access_token, homeserver, bot_user");
     process.exit(1);
 }
-if (config.has('homeserver')) {
-    homeserver = config.get('homeserver');
-} else {
-    console.log("mising homeserver");
-    process.exit(1);
-}
+
+access_token = config.get('access_token');
+homeserver = config.get('homeserver');
+bot_user = config.get('bot_user');
 
 const client = new MatrixClient(homeserver, access_token);
 AutojoinRoomsMixin.setupOnClient(client);
@@ -34,6 +32,7 @@ client.on("room.join", (roomId) => {
     });
 });
 client.on("room.message", (roomId, event) => {
+    if (event.sender === bot_user) return;
     elizas[roomId].eliza.getResponse(event.content.body)
         .then((response) => {
             var responseText = '';

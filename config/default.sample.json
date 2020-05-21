@@ -1,4 +1,5 @@
 {
     "access_token": "",
-    "homeserver": "https://matrix.org"
+    "homeserver": "https://matrix.org",
+    "bot_user": "@elizabot:<your matrix server>"
 }
